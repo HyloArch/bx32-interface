@@ -1,12 +1,7 @@
-import socket
+from connection import Connection
+from protocol import Message
 
-UDP_IP = "0.0.0.0"
-UDP_PORT = 8000
+conn = Connection("192.168.9.108", 10023)
 
-with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
-    sock.bind((UDP_IP, UDP_PORT))
-    print(f"Listening for UDP packets on port {UDP_PORT}...")
-
-    while True:
-        data, addr = sock.recvfrom(1024)
-        print(f"Recieved message from {addr}: {data.decode('utf-8')}")
+message = Message("/test", 5, 1.3, "hello", b"hello")
+conn.send_message(message)
