@@ -1,26 +1,34 @@
 import socket, struct
-from protocol import encode_osc, decode_osc, Message, print_encoded_message, decode
+from threading import Thread
+from typing import Callable
+import os
 
-class Connection:
+from protocol import Message, format_encoded_message
+
+class Connection(Thread):
 
     def __init__(self, host: str, port: int) -> None:
+        super().__init__()
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.server = (host, port)
+        self.socket.bind(("127.0.0.1", 10024))
+        self.handlers: list[Callable[[Message], None]] = []
     
     def __delete__(self, instance) -> None:
         self.socket.close()
 
+    def add_handler(self, handler: Callable[[Message], None]):
+        self.handlers.append(handler)
+
+    def run(self):
+        while True:
+            data, addr = self.socket.recvfrom(512)
+            if not data:
+                return
+            print("X ->  ", format_encoded_message(data))
+
     def send_message(self, message: Message) -> None:
         data = message.encode()
-        # self.socket.sendto(message, self.server)
+        self.socket.sendto(data, self.server)
 
-        # display = " ".join(map(lambda b: '~' if b == 0 else chr(b) if chr(b).isprintable() else str(b), message))
-        # print(len(message), display)
-        # print(len(message), message.hex())
-
-        print_encoded_message(data)
-
-        test = decode_osc(data)
-        print(test)
-
-
+        print("  -> X", format_encoded_message(data))

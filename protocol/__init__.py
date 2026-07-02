@@ -1,6 +1,6 @@
 from .encoder import encode_osc, encode_int, encode_float
 from .decoder import decode_osc, decode_int, decode_float
-from .message import Message, decode, print_encoded_message
+from .message import Message, decode, format_encoded_message
 
 __all__ = [
     'encode_osc', 
@@ -11,5 +11,5 @@ __all__ = [
     'decode_float',
     'Message', 
     'decode', 
-    'print_encoded_message'
+    'format_encoded_message'
 ]

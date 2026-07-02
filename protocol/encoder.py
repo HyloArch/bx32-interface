@@ -34,7 +34,7 @@ class _Encoder:
         encoder.align_buffer()
     
     def align_buffer(self, force_padding = True) -> None:
-        self.buffer_index = (self.buffer_index - (0 if force_padding else 1) & ~0b11) + 4
+        self.buffer_index = ((self.buffer_index - (0 if force_padding else 1)) & ~0b11) + 4
     
     def get_bytes(self) -> bytes:
         if self.buffer[self.buffer_index - 1] != 0x00:

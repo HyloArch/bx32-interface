@@ -8,5 +8,5 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
     print(f"Listening for UDP packets on port {UDP_PORT}...")
 
     while True:
-        data, addr = sock.recvfrom(1024)
+        data, addr = sock.recvfrom(512)
         print(f"Recieved message from {addr}: {data.decode('utf-8')}")
