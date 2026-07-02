@@ -1,5 +1,5 @@
 import struct
-from typing import Literal
+from typing import Literal, Union
 
 def encode_int(val: int, endian: Literal['little', 'big'] = 'little') -> bytes:
     return val.to_bytes(4, endian, signed=True)
@@ -13,7 +13,7 @@ class _Encoder:
         self.buffer = bytearray(256)
         self.buffer_index = 0
 
-    def put_byte(self, val: str | int) -> None:
+    def put_byte(self, val: Union[str, int]) -> None:
         byte = ord(val) if isinstance(val, str) else val
         self.buffer[self.buffer_index] = byte
         self.buffer_index += 1

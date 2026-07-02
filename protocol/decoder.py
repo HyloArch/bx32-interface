@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import Literal, Union
 import struct
 
 def decode_int(val: bytes, endian: Literal['little', 'big'] = 'little') -> int:
@@ -36,7 +36,7 @@ class _Decoder:
         length = self.message.find(0x00, self.message_index) - self.message_index
         return self.get_bytes(length).decode('utf-8')
     
-    def read_byte(self, val: str | int) -> bool:
+    def read_byte(self, val: Union[str, int]) -> bool:
         byte = ord(val) if isinstance(val, str) else val
         return byte == self.get_byte()
     
