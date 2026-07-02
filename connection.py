@@ -11,7 +11,6 @@ class Connection(Thread):
         super().__init__()
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.server = (host, port)
-        self.socket.bind(("127.0.0.1", 10024))
         self.handlers: list[Callable[[Message], None]] = []
     
     def __delete__(self, instance) -> None:
