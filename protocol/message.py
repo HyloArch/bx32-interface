@@ -52,15 +52,14 @@ def format_encoded_message(message: bytes, with_spacing = False) -> str:
 
     display += _add_spacing(",", with_spacing)
     for param in decoded.params:
-        match type(param):
-            case builtins.int:
-                display += _add_spacing("i", with_spacing)
-            case builtins.float:
-                display += _add_spacing("f", with_spacing)
-            case builtins.str:
-                display += _add_spacing("s", with_spacing)
-            case builtins.bytes:
-                display += _add_spacing("b", with_spacing)
+        if isinstance(param, int):
+            display += _add_spacing("i", with_spacing)
+        elif isinstance(param, float):
+            display += _add_spacing("f", with_spacing)
+        elif isinstance(param, str):
+            display += _add_spacing("s", with_spacing)
+        elif isinstance(param, bytes):
+            display += _add_spacing("b", with_spacing)
 
     index = len(decoded.params) + 2
     display += _null_spacing(with_spacing)
@@ -69,15 +68,14 @@ def format_encoded_message(message: bytes, with_spacing = False) -> str:
         index += 1
     
     for param in decoded.params:
-        match type(param):
-            case builtins.int:
-                display += f"[{param:>6}]"
-            case builtins.float:
-                display += f"[{str(param)[:6]:>6}]"
-            case builtins.str:
-                display += _format_str(param, with_spacing)
-            case builtins.bytes:
-                display += f"[{len(param):>6}]"
-                display += _format_bytes(param, with_spacing)
+        if isinstance(param, int):
+            display += f"[{param:>6}]"
+        elif isinstance(param, float):
+            display += f"[{str(param)[:6]:>6}]"
+        elif isinstance(param, str):
+            display += _format_str(param, with_spacing)
+        elif isinstance(param, bytes):
+            display += f"[{len(param):>6}]"
+            display += _format_bytes(param, with_spacing)
 
     return display

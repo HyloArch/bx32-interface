@@ -1,4 +1,4 @@
-import struct, builtins
+import struct
 from typing import Literal
 
 def encode_int(val: int, endian: Literal['little', 'big'] = 'little') -> bytes:
@@ -54,29 +54,27 @@ def encode_osc(address: str, *params) -> bytes:
 
     encoder.put_byte(",")
     for param in params:
-        match type(param):
-            case builtins.int:
-                encoder.put_byte('i')
-            case builtins.float:
-                encoder.put_byte('f')
-            case builtins.str: 
-                encoder.put_byte('s')
-            case builtins.bytes:
-                encoder.put_byte('b')
+        if isinstance(param, int):
+            encoder.put_byte('i')
+        elif isinstance(param, float):
+            encoder.put_byte('f')
+        elif isinstance(param, str): 
+            encoder.put_byte('s')
+        elif isinstance(param, bytes):
+            encoder.put_byte('b')
 
     encoder.align_buffer()
     
     for param in params:
-        match type(param):
-            case builtins.int:
-                encoder.put_int(param)
-            case builtins.float:
-                encoder.put_float(param)
-            case builtins.str: 
-                encoder.put_str(param)
-            case builtins.bytes:
-                encoder.put_int(len(param))
-                encoder.put_bytes(param)
-                encoder.align_buffer(False)
+        if isinstance(param, int):
+            encoder.put_int(param)
+        elif isinstance(param, float):
+            encoder.put_float(param)
+        elif isinstance(param, str): 
+            encoder.put_str(param)
+        elif isinstance(param, bytes):
+            encoder.put_int(len(param))
+            encoder.put_bytes(param)
+            encoder.align_buffer(False)
     
     return encoder.get_bytes()

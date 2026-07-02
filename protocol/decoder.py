@@ -68,17 +68,16 @@ def decode_osc(message: bytes) -> tuple[str, list]:
 
     params = []
     for t in types:
-        match t:
-            case 'i':
-                params.append(decoder.get_int())
-            case 'f':
-                params.append(decoder.get_float())
-            case 's':
-                params.append(decoder.get_str())
-                decoder.align_index()
-            case 'b':
-                length = decoder.get_int()
-                params.append(decoder.get_bytes(length))
-                decoder.align_index(False)
+        if t == 'i':
+            params.append(decoder.get_int())
+        elif 'f':
+            params.append(decoder.get_float())
+        elif 's':
+            params.append(decoder.get_str())
+            decoder.align_index()
+        elif 'b':
+            length = decoder.get_int()
+            params.append(decoder.get_bytes(length))
+            decoder.align_index(False)
 
     return (address, params)
