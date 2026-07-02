@@ -1,4 +1,4 @@
-import struct
+import struct, builtins
 from typing import Literal
 
 def encode_int(val: int, endian: Literal['little', 'big'] = 'little') -> bytes:
@@ -54,27 +54,27 @@ def encode_osc(address: str, *params) -> bytes:
 
     encoder.put_byte(",")
     for param in params:
-        match param:
-            case int():
+        match type(param):
+            case builtins.int:
                 encoder.put_byte('i')
-            case float():
+            case builtins.float:
                 encoder.put_byte('f')
-            case str(): 
+            case builtins.str: 
                 encoder.put_byte('s')
-            case bytes():
+            case builtins.bytes:
                 encoder.put_byte('b')
 
     encoder.align_buffer()
     
     for param in params:
-        match param:
-            case int():
+        match type(param):
+            case builtins.int:
                 encoder.put_int(param)
-            case float():
+            case builtins.float:
                 encoder.put_float(param)
-            case str(): 
+            case builtins.str: 
                 encoder.put_str(param)
-            case bytes():
+            case builtins.bytes:
                 encoder.put_int(len(param))
                 encoder.put_bytes(param)
                 encoder.align_buffer(False)
